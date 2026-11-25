@@ -1,9 +1,19 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import Logo from "./Logo";
-import { Phone, MapPin, Mail, Send } from "lucide-react";
+import { Phone, MapPin, Mail, Send, FileText, Building2 } from "lucide-react";
 import { useLanguage, Language } from "@/context/LanguageContext";
+import { COMPANY_REQUISITES, LEGAL_NAV_ITEMS } from "@/data/legalDocs";
+import {
+  VisaLogo,
+  MastercardLogo,
+  UnionPayLogo,
+  UzcardLogo,
+  HumoLogo,
+  ThreeDSecureLogo,
+} from "./PaymentLogos";
 
 function InstagramIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -31,98 +41,163 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[#07152B] border-t border-white/10 text-white pt-12 pb-8">
       <div className="max-w-[1480px] mx-auto px-3 sm:px-5 lg:px-8">
-        {/* Main Footer Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pb-10 border-b border-white/10">
-          {/* Col 1: Logo */}
-          <div className="md:col-span-4 flex items-center">
+        {/* Main Footer Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 border-b border-white/10">
+          {/* Col 1: Logo & Company Info */}
+          <div className="md:col-span-4 space-y-4">
             <Logo variant="gold" />
+            <div className="text-xs text-white/75 space-y-1.5 leading-relaxed">
+              <p className="font-semibold text-white flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-[#D4A045] flex-shrink-0" />
+                {COMPANY_REQUISITES.fullName}
+              </p>
+              <p className="text-white/60">
+                Страна: {COMPANY_REQUISITES.country} • ИНН: {COMPANY_REQUISITES.inn}
+              </p>
+              <p className="text-white/60">
+                Дескриптор в выписке: <span className="text-[#F5D48B] font-mono">{COMPANY_REQUISITES.descriptor}</span>
+              </p>
+            </div>
           </div>
 
-          {/* Col 2: Contacts in Tashkent */}
-          <div className="md:col-span-5 space-y-2 text-xs sm:text-sm text-white/80">
+          {/* Col 2: Contacts & Addresses in Tashkent */}
+          <div className="md:col-span-4 space-y-2.5 text-xs sm:text-sm text-white/80">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#F3D088] mb-2">
+              Контакты и адреса
+            </h4>
+
             <div className="flex items-center gap-2.5">
               <Phone className="w-4 h-4 text-[#D4A045] flex-shrink-0" />
               <a
                 href="tel:+998901234567"
                 className="hover:text-white font-medium tracking-wide transition-colors"
               >
-                +998 90 123 45 67
+                {COMPANY_REQUISITES.supportPhone} (служба поддержки)
               </a>
             </div>
 
-            <div className="flex items-center gap-2.5">
-              <MapPin className="w-4 h-4 text-[#D4A045] flex-shrink-0" />
-              <span>{t.footer.address}</span>
+            <div className="flex items-start gap-2.5 text-xs">
+              <MapPin className="w-4 h-4 text-[#D4A045] flex-shrink-0 mt-0.5" />
+              <span>
+                <strong className="text-white/90">Юридический адрес:</strong>{" "}
+                {COMPANY_REQUISITES.legalAddress}
+              </span>
+            </div>
+
+            <div className="flex items-start gap-2.5 text-xs">
+              <MapPin className="w-4 h-4 text-[#D4A045] flex-shrink-0 mt-0.5" />
+              <span>
+                <strong className="text-white/90">Для корреспонденции:</strong>{" "}
+                {COMPANY_REQUISITES.correspondenceAddress}
+              </span>
             </div>
 
             <div className="flex items-center gap-2.5">
               <Mail className="w-4 h-4 text-[#D4A045] flex-shrink-0" />
               <a
-                href="mailto:info@happyfly.uz"
+                href={`mailto:${COMPANY_REQUISITES.supportEmail}`}
                 className="hover:text-white font-medium transition-colors"
               >
-                info@happyfly.uz
+                {COMPANY_REQUISITES.supportEmail}
               </a>
             </div>
           </div>
 
-          {/* Col 3: Socials + Language Switcher */}
-          <div className="md:col-span-3 flex flex-col sm:flex-row md:flex-col lg:flex-row items-start md:items-end lg:items-center justify-between gap-4">
-            {/* Social Icons */}
-            <div className="flex items-center gap-3">
-              <a
-                href="https://t.me/happyfly_uz"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#229ED9] hover:border-[#229ED9] transition-all duration-200"
-                aria-label="Telegram"
-              >
-                <Send className="w-4 h-4 transform -translate-x-px translate-y-px" />
-              </a>
-
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#E1306C] hover:border-[#E1306C] transition-all duration-200"
-                aria-label="Instagram"
-              >
-                <InstagramIcon className="w-4 h-4" />
-              </a>
-
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#FF0000] hover:border-[#FF0000] transition-all duration-200"
-                aria-label="YouTube"
-              >
-                <YoutubeIcon className="w-4 h-4" />
-              </a>
+          {/* Col 3: Legal Documents & Socials */}
+          <div className="md:col-span-4 flex flex-col justify-between gap-6">
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#F3D088] mb-2.5">
+                Оферта и политики сайта
+              </h4>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs text-white/75">
+                {LEGAL_NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="inline-flex items-center gap-1.5 hover:text-[#F5D48B] transition-colors"
+                    >
+                      <FileText className="w-3 h-3 text-[#D4A045] flex-shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Language Switcher RU | UZ | EN */}
-            <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-white/60">
-              {languages.map((lng, idx) => (
-                <React.Fragment key={lng}>
-                  {idx > 0 && <span className="text-white/20">|</span>}
-                  <button
-                    type="button"
-                    onClick={() => setLang(lng)}
-                    className={`transition-colors py-1 relative ${
-                      activeLang === lng
-                        ? "text-[#F5D48B] font-bold"
-                        : "hover:text-white"
-                    }`}
-                  >
-                    {lng}
-                    {activeLang === lng && (
-                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4A045] rounded-full" />
-                    )}
-                  </button>
-                </React.Fragment>
-              ))}
+            {/* Socials + Language Switcher */}
+            <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+              <div className="flex items-center gap-2.5">
+                <a
+                  href="https://t.me/happyfly_uz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#229ED9] hover:border-[#229ED9] transition-all duration-200"
+                  aria-label="Telegram"
+                >
+                  <Send className="w-4 h-4 transform -translate-x-px translate-y-px" />
+                </a>
+
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#E1306C] hover:border-[#E1306C] transition-all duration-200"
+                  aria-label="Instagram"
+                >
+                  <InstagramIcon className="w-4 h-4" />
+                </a>
+
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-[#FF0000] hover:border-[#FF0000] transition-all duration-200"
+                  aria-label="YouTube"
+                >
+                  <YoutubeIcon className="w-4 h-4" />
+                </a>
+              </div>
+
+              {/* Language Switcher RU | UZ | EN */}
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-wider text-white/60">
+                {languages.map((lng, idx) => (
+                  <React.Fragment key={lng}>
+                    {idx > 0 && <span className="text-white/20">|</span>}
+                    <button
+                      type="button"
+                      onClick={() => setLang(lng)}
+                      className={`transition-colors py-1 relative ${
+                        activeLang === lng
+                          ? "text-[#F5D48B] font-bold"
+                          : "hover:text-white"
+                      }`}
+                    >
+                      {lng}
+                      {activeLang === lng && (
+                        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#D4A045] rounded-full" />
+                      )}
+                    </button>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* Payment Systems & 3D-Secure Row */}
+        <div className="py-5 border-b border-white/10 flex flex-wrap items-center justify-between gap-4">
+          <div className="text-[11px] text-white/60 max-w-md">
+            Принимаем к оплате карты национальных и международных платёжных систем с защитой{" "}
+            <strong className="text-white/85">3D-Secure</strong>:
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 bg-white/95 px-4 py-2 rounded-2xl shadow-sm">
+            <UzcardLogo className="h-5" />
+            <HumoLogo className="h-5" />
+            <VisaLogo className="h-4" />
+            <MastercardLogo className="h-5" />
+            <UnionPayLogo className="h-5" />
+            <ThreeDSecureLogo className="h-6" />
           </div>
         </div>
 

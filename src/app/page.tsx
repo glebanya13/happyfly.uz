@@ -9,7 +9,6 @@ import LeadBookingSection from "@/components/LeadBookingSection";
 import OnlinePaymentWidget from "@/components/OnlinePaymentWidget";
 import Footer from "@/components/Footer";
 import TourModal from "@/components/TourModal";
-import { LanguageProvider } from "@/context/LanguageContext";
 
 function MainContent() {
   const [isTourModalOpen, setIsTourModalOpen] = useState(false);
@@ -66,9 +65,5 @@ function MainContent() {
 }
 
 export default function Home() {
-  return (
-    <LanguageProvider>
-      <MainContent />
-    </LanguageProvider>
-  );
+  return <MainContent />;
 }

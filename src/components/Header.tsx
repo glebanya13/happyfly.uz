@@ -9,17 +9,26 @@ import { useLanguage, Language } from "@/context/LanguageContext";
 interface HeaderProps {
   onOpenBookingModal?: () => void;
   activeNav?: string;
+  variant?: "transparent" | "solid";
 }
 
-export default function Header({ onOpenBookingModal }: HeaderProps) {
+export default function Header({
+  onOpenBookingModal,
+  variant = "transparent",
+}: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const { lang: currentLang, setLang, t } = useLanguage();
 
   const languages: Language[] = ["RU", "UZ", "EN"];
 
+  const headerPositionClass =
+    variant === "solid"
+      ? "relative bg-[#07152B] border-b border-white/10 shadow-md"
+      : "absolute top-0 left-0 right-0 bg-gradient-to-b from-[#07152B]/90 via-[#07152B]/50 to-transparent";
+
   return (
-    <header className="absolute top-0 left-0 right-0 z-40 w-full transition-all duration-300 bg-gradient-to-b from-[#07152B]/90 via-[#07152B]/50 to-transparent">
+    <header className={`z-40 w-full transition-all duration-300 ${headerPositionClass}`}>
       <div className="max-w-[1480px] mx-auto px-3 sm:px-5 lg:px-8">
         <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
@@ -30,35 +39,35 @@ export default function Header({ onOpenBookingModal }: HeaderProps) {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-7 xl:space-x-10 text-white/90 text-sm font-medium tracking-wide">
             <Link
-              href="#cruises"
+              href="/#cruises"
               className="hover:text-[#F3D088] transition-colors duration-200"
             >
               {t.nav.cruises}
             </Link>
             <span className="text-white/20 select-none">|</span>
             <Link
-              href="#tours"
+              href="/#tours"
               className="hover:text-[#F3D088] transition-colors duration-200"
             >
               {t.nav.tours}
             </Link>
             <span className="text-white/20 select-none">|</span>
             <Link
-              href="#uzbekistan"
+              href="/#uzbekistan"
               className="hover:text-[#F3D088] transition-colors duration-200"
             >
               {t.nav.uzbekistan}
             </Link>
             <span className="text-white/20 select-none">|</span>
             <Link
-              href="#visas"
+              href="/#visas"
               className="hover:text-[#F3D088] transition-colors duration-200"
             >
               {t.nav.visas}
             </Link>
             <span className="text-white/20 select-none">|</span>
             <Link
-              href="#online-payment"
+              href="/#online-payment"
               className="hover:text-[#F3D088] text-[#F3D088] font-semibold transition-colors duration-200 flex items-center gap-1.5"
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -145,35 +154,35 @@ export default function Header({ onOpenBookingModal }: HeaderProps) {
         <div className="sm:hidden bg-[#07152B]/98 border-b border-white/10 backdrop-blur-xl px-4 pt-4 pb-6 space-y-4">
           <div className="flex flex-col space-y-3 text-white/90 font-medium text-sm">
             <Link
-              href="#cruises"
+              href="/#cruises"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-white/10"
             >
               {t.services.cruises}
             </Link>
             <Link
-              href="#tours"
+              href="/#tours"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-white/10"
             >
               {t.services.outbound}
             </Link>
             <Link
-              href="#uzbekistan"
+              href="/#uzbekistan"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-white/10"
             >
               {t.services.inbound}
             </Link>
             <Link
-              href="#visas"
+              href="/#visas"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg hover:bg-white/10"
             >
               {t.services.visas}
             </Link>
             <Link
-              href="#online-payment"
+              href="/#online-payment"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2 rounded-lg bg-[#D4A045]/15 text-[#F5D48B] font-semibold border border-[#D4A045]/30"
             >

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Plane,
   Briefcase,
@@ -13,6 +14,7 @@ import {
   Zap,
   Headphones,
   Shield,
+  AlertCircle,
 } from "lucide-react";
 import {
   VisaLogo,
@@ -21,7 +23,9 @@ import {
   UnionPayLogo,
   UzcardLogo,
   HumoLogo,
+  ThreeDSecureLogo,
 } from "./PaymentLogos";
+import { COMPANY_REQUISITES } from "@/data/legalDocs";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function OnlinePaymentWidget() {
@@ -29,6 +33,14 @@ export default function OnlinePaymentWidget() {
   const [selectedService, setSelectedService] = useState("flight");
   const [selectedPayment, setSelectedPayment] = useState("uzcard");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  // Mandatory Cardholder details (Bank acquiring requirement: name, surname, address, phone)
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [formError, setFormError] = useState("");
 
   // Conversion rate USD to UZS (approx 12,900 UZS)
   const uzsRate = 12900;
@@ -89,10 +101,23 @@ export default function OnlinePaymentWidget() {
   const formattedUzs = (currentService.price * uzsRate).toLocaleString("ru-RU");
 
   const handlePay = () => {
+    if (!firstName.trim() || !lastName.trim() || !address.trim() || !phone.trim()) {
+      setFormError(
+        "Пожалуйста, заполните обязательные данные держателя карты (имя, фамилия, адрес, телефон)."
+      );
+      return;
+    }
+    if (!acceptedTerms) {
+      setFormError(
+        "Пожалуйста, подтвердите ознакомление с Публичной офертой и Политикой возврата перед оплатой."
+      );
+      return;
+    }
+    setFormError("");
     setPaymentSuccess(true);
     setTimeout(() => {
       setPaymentSuccess(false);
-    }, 5000);
+    }, 7000);
   };
 
   return (
@@ -216,15 +241,126 @@ export default function OnlinePaymentWidget() {
             </div>
           </div>
 
-          {/* STEP 3: Данные платежа */}
+          {/* STEP 3: Данные держателя карты и оплата */}
           <div className="pt-4 border-t border-gray-100">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="w-7 h-7 rounded-full bg-[#0B1B3D] text-white flex items-center justify-center font-bold text-sm">
-                3
-              </span>
-              <h3 className="text-base sm:text-lg font-bold text-[#0B1B3D]">
-                {t.payment.step3}
-              </h3>
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+              <div className="flex items-center gap-3">
+                <span className="w-7 h-7 rounded-full bg-[#0B1B3D] text-white flex items-center justify-center font-bold text-sm">
+                  3
+                </span>
+                <h3 className="text-base sm:text-lg font-bold text-[#0B1B3D]">
+                  {t.payment.step3}
+                </h3>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <ThreeDSecureLogo />
+              </div>
+            </div>
+
+            {/* Cardholder Details (Name, Surname, Address, Phone) */}
+            <div className="mb-6 bg-[#F8FAFC] rounded-2xl p-5 sm:p-6 border border-gray-200/70">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <h4 className="text-sm font-bold text-[#0B1B3D]">
+                  Данные держателя карты (обязательно для безопасности платежа)
+                </h4>
+                <span className="text-[11px] text-gray-500">
+                  Хранятся 6 месяцев для банка-эквайера •{" "}
+                  <Link href="/privacy" className="text-[#007AFF] hover:underline">
+                    Политика конфиденциальности
+                  </Link>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    Имя держателя карты *
+                  </label>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Например: Aziz"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-[#07152B] focus:outline-none focus:border-[#007AFF]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    Фамилия держателя карты *
+                  </label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="Например: Karimov"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-[#07152B] focus:outline-none focus:border-[#007AFF]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    Контактный телефон *
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+998 90 123 45 67"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-[#07152B] focus:outline-none focus:border-[#007AFF]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    Адрес проживания / регистрации *
+                  </label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder="г. Ташкент, ул. ..."
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-sm text-[#07152B] focus:outline-none focus:border-[#007AFF]"
+                  />
+                </div>
+              </div>
+
+              {/* Pre-payment consent & descriptor info */}
+              <div className="mt-4 pt-4 border-t border-gray-200/70 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <label className="flex items-start gap-2.5 cursor-pointer text-xs text-gray-600 leading-relaxed">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#007AFF] focus:ring-[#007AFF]"
+                  />
+                  <span>
+                    Я соглашаюсь с{" "}
+                    <Link href="/offer" className="text-[#007AFF] font-semibold hover:underline">
+                      Публичной офертой
+                    </Link>
+                    ,{" "}
+                    <Link href="/refund-policy" className="text-[#007AFF] font-semibold hover:underline">
+                      Политикой возврата и отмены услуг
+                    </Link>
+                    ,{" "}
+                    <Link href="/payment-policy" className="text-[#007AFF] font-semibold hover:underline">
+                      Платежной политикой
+                    </Link>{" "}
+                    и{" "}
+                    <Link href="/privacy" className="text-[#007AFF] font-semibold hover:underline">
+                      Политикой конфиденциальности
+                    </Link>
+                    . Ознакомлен(а) со сроком доставки документов (15 мин – 24 ч) и необходимостью сохранения чека.
+                  </span>
+                </label>
+
+                <div className="flex-shrink-0 bg-white px-3.5 py-2 rounded-xl border border-gray-200 text-xs">
+                  <span className="text-gray-500">Дескриптор в выписке: </span>
+                  <strong className="font-mono text-[#0B1B3D]">{COMPANY_REQUISITES.descriptor}</strong>
+                  <span className="text-gray-400 block text-[10px]">
+                    {COMPANY_REQUISITES.fullName}
+                  </span>
+                </div>
+              </div>
             </div>
 
             <div className="bg-[#F8FAFC] rounded-2xl p-5 sm:p-6 border border-gray-200/70 flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -280,11 +416,22 @@ export default function OnlinePaymentWidget() {
               </div>
             </div>
 
+            {formError && (
+              <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs sm:text-sm flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+                <span>{formError}</span>
+              </div>
+            )}
+
             {paymentSuccess && (
-              <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-3 animate-fade-in">
+              <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs sm:text-sm flex items-center gap-3 animate-fade-in">
                 <Check className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                 <span>
-                  {selectedPayment.toUpperCase()} — {currentService.title} ✓
+                  Заявка на оплату ({selectedPayment.toUpperCase()} — {currentService.title}) для{" "}
+                  <strong>
+                    {firstName} {lastName}
+                  </strong>{" "}
+                  сформирована ✓ Дескриптор: <strong>{COMPANY_REQUISITES.descriptor}</strong>. Сохраните копию чека после подтверждения 3D-Secure.
                 </span>
               </div>
             )}

@@ -90,3 +90,25 @@ export function HumoLogo({ className = "h-6" }: { className?: string }) {
     </div>
   );
 }
+
+export function ThreeDSecureLogo({ className = "h-7" }: { className?: string }) {
+  return (
+    <div
+      className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white border border-gray-200 shadow-sm ${className}`}
+      title="Защита платежей 3D-Secure (Verified by Visa / Mastercard SecureCode)"
+    >
+      <svg viewBox="0 0 24 24" className="w-4 h-4 text-[#059669] flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="m9 12 2 2 4-4" />
+      </svg>
+      <div className="flex flex-col leading-none text-left">
+        <span className="text-[10px] font-extrabold text-[#07152B] tracking-tight">
+          3D-SECURE
+        </span>
+        <span className="text-[8px] font-semibold text-[#059669] uppercase tracking-wider">
+          Verified
+        </span>
+      </div>
+    </div>
+  );
+}

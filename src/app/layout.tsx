@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Playfair_Display, Caveat } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
@@ -33,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="ru" className={`${montserrat.variable} ${playfair.variable} ${caveat.variable} scroll-smooth`}>
       <body className="font-sans antialiased bg-white text-[#1A202C] selection:bg-[#D4A045] selection:text-white">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );
